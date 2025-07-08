@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Game</title>
+  </head>
+  <body>
+     <p>Lives: </p> <p id="lives">0</p>
+    <div id="game">
+        <div id="buttons-div">
+      <button onclick="startGame()" id="start-button">Start Game</button>
+    </div>
+      <div id="game-display"></div>
+    </div>
+    <button onclick="movePlayerRight()">Right</button><button onclick="movePlayerLeft()">Left</button>
+    <script src="app.js"></script>
+  </body>
+</html>

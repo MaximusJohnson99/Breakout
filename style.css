@@ -1,0 +1,62 @@
+body {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    display: flex;
+    font-size: x-large;
+}
+
+#game {
+  display: flex;
+  height: 11*55 + 20px;
+}
+
+#game-display {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(15, 55px);
+  grid-template-rows: repeat(10, 55px);
+  border: 10px double black;
+  > div {
+    grid-area: span 1 / span 1;
+  }
+}
+
+.empty {
+  background-color: white;
+}
+.block {
+  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+#ball {
+  position: absolute;
+  height: 21px;
+  width: 21px;
+  border-radius: 10px;
+  background-color: black;
+}
+
+#user-block {
+  position: absolute;
+  height: 10px;
+  width: 165px;
+  background-color: black;
+}
+
+#buttons-div {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 30%;
+  align-items: center;
+  
+}
+#start-button {
+  width: 200px;
+  height: 50px; 
+  font-size: 28px;
+}
