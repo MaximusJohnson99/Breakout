@@ -1,5 +1,6 @@
 :root {
-  --oxford-blue: hsla(225, 59%, 11%, 1);
+  --oxford-blue: hsla(225, 58%, 11%, 1);
+  --oxford-blue: #0c142c;
   --space-cadet: hsla(225, 40%, 18%, 1);
   --yinmn-blue: hsla(213, 30%, 32%, 1);
   --verdigris: hsla(179, 44%, 55%, 1);
@@ -55,6 +56,7 @@ body {
   grid-template-rows: repeat(10, 55px);
   border: 6px solid var(--verdigris);
   scale: 0.9;
+  margin: 5px;
 }
 
 .empty {
@@ -122,6 +124,7 @@ button:hover {
   border: 5px solid var(--oxford-blue);
   background-color: var(--verdigris);
   width: 20%;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,5 +186,39 @@ button:hover {
     font-family: "Tiny5", sans-serif;
     font-weight: bold;
     letter-spacing: 3px;
+    margin-bottom: 10px;
   }
+  > h2 {
+    margin-top: 0;
+    font-size: 50px;
+    color: var(--fluorescent-cyan);
+    text-shadow: 4px 4px 8px var(--verdigris), -4px -4px 8px var(--verdigris);
+    font-family: "Tiny5", sans-serif;
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+}
+
+#game-and-controls {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  width: 90%;
+  justify-content: center;
+  > button {
+    display: none;
+    padding-top: 8px;
+    height: 100px;
+    width: 150px;
+  }
+  > button:hover {
+    > svg {
+      filter: drop-shadow(-2px -2px 4px var(--verdigris));
+      > path {
+        fill: var(--fluorescent-cyan);
+        filter: drop-shadow(1px 1px 1px var(--verdigris));
+      }
+    }
+  }
+  margin-bottom: 10px;
 }

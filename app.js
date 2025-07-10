@@ -1,9 +1,21 @@
 let lives = 3;
+let livesEmoji = "";
 let score = 0;
 let scoreDisplay = document.getElementById("score");
 let currentlevel = 1;
 let livesDisplay = document.getElementById("lives");
-livesDisplay.innerText = `Lives: ${lives}`;
+function displayLives() {
+  livesEmoji = "";
+  if (lives > 0) {
+    for (let i = 0; i < lives; i++) {
+      livesEmoji += "♥";
+    }
+  } else {
+    livesEmoji = "--";
+  }
+  return livesEmoji;
+}
+livesDisplay.innerText = `Lives: ${displayLives()}`;
 let moveBallConstant;
 let checkBallConstant;
 const gameDisplay = document.querySelector("#game-display");
@@ -23,11 +35,11 @@ const userBlockY = 9 * 55;
 let randomizer = Math.random();
 let ballVelocityX;
 if (randomizer < 0.5) {
-  ballVelocityX = 1;
+  ballVelocityX = 2;
 } else {
-  ballVelocityX = -1;
+  ballVelocityX = -2;
 }
-let ballVelocityY = -1;
+let ballVelocityY = -2;
 let currentBlock;
 const x = "x";
 const o = "o";
@@ -45,15 +57,28 @@ const colorArray = [
 ];
 let gameMap;
 const blockList = [];
-const gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h3>Score: ${score}</h3><button onclick='resetGame()'>Retry</button></div>`;
+const gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
 const winScreen = `<div class="gameend-screen"><h1>You Win!</h1> <button onclick="loadNextLevel()">Next Level</button></div>`;
 const completeScreen = `<div class="gameend-screen"><h1>Congratulations! You have completed the game!</h1></div>`;
+let playButtons = document.querySelectorAll(".play-buttons");
+let playButtonLeft = playButtons[0];
+let playButtonRight = playButtons[1];
+playButtonLeft.addEventListener("mousedown", movePlayerLeft);
+playButtonLeft.addEventListener("touchstart", movePlayerLeft);
+playButtonLeft.addEventListener("mouseup", stopMoveLeft);
+playButtonLeft.addEventListener("touchend", stopMoveLeft);
+playButtonRight.addEventListener("mousedown", movePlayerRight);
+playButtonRight.addEventListener("touchstart", movePlayerRight);
+playButtonRight.addEventListener("mouseup", stopMoveRight);
+playButtonRight.addEventListener("touchend", stopMoveRight);
+let moveLeft;
+let moveRight;
 
 async function loadLevels() {
   let allLevelsRaw = await fetch("maps.json");
   let allLevels = await allLevelsRaw.json();
-  if (allLevels.levels[currentlevel - 1] !== undefined) {
-    gameMap = allLevels.levels[currentlevel - 1].map;
+  if (allLevels.levels[currentlevel] !== undefined) {
+    gameMap = allLevels.levels[currentlevel].map;
   } else {
     gameMap = undefined;
   }
@@ -77,7 +102,7 @@ class Block {
     this.element.setAttribute("class", "block");
     this.element.setAttribute("id", this.name);
     this.lastHitTime = 0;
-    this.coolDownDuration = 300;
+    this.coolDownDuration = 900;
     this.currentTime;
   }
   hitBlock() {
@@ -91,13 +116,13 @@ class Block {
       this.colorNum++;
       this.element.style.backgroundColor = colorArray[this.colorNum];
       if (ballMidX <= this.topLeft[0]) {
-        ballVelocityX = -1;
+        ballVelocityX = -2;
       } else if (ballMidX >= this.bottomRight[0]) {
-        ballVelocityX = 1;
+        ballVelocityX = 2;
       } else if (ballMidY <= this.topLeft[1]) {
-        ballVelocityY = -1;
+        ballVelocityY = -2;
       } else if (ballMidY >= this.bottomRight[1]) {
-        ballVelocityY = 1;
+        ballVelocityY = 2;
       } else {
         ballVelocityX *= -1;
         ballVelocityY *= -1;
@@ -155,6 +180,9 @@ async function loadGame() {
     loadMap();
   } else {
     gameDisplay.innerHTML = completeScreen;
+    playButtons.forEach((playButton) => {
+      playButton.style.display = "none";
+    });
   }
 }
 loadGame();
@@ -162,19 +190,62 @@ loadGame();
 function movePlayer(e) {
   switch (e.key) {
     case "ArrowLeft":
-      if (userBlockX >= 15) {
-        userBlockX -= 15;
-      }
-      userBlock.style.left = userBlockX + "px";
+      movePlayerLeft();
       break;
     case "ArrowRight":
-      if (userBlockX <= 12 * 55 - 15) {
-        userBlockX += 15;
-      }
-      userBlock.style.left = userBlockX + "px";
+      movePlayerRight();
       break;
     default:
       break;
+  }
+}
+
+function stopMovePlayer(e) {
+  switch (e.key) {
+    case "ArrowLeft":
+      stopMoveLeft();
+      break;
+    case "ArrowRight":
+      stopMoveRight();
+      break;
+    default:
+      break;
+  }
+}
+
+function movePlayerLeft() {
+  if (moveLeft === undefined) {
+    moveLeft = setInterval(() => {
+      if (userBlockX >= 15) {
+        userBlockX -= 15;
+        userBlock.style.left = userBlockX + "px";
+      }
+    }, 35);
+  }
+}
+
+function movePlayerRight() {
+  if (moveRight === undefined) {
+    moveRight = setInterval(() => {
+      if (userBlockX <= 12 * 55 - 15) {
+        userBlockX += 15;
+        userBlock.style.left = userBlockX + "px";
+      }
+    }, 35);
+  }
+}
+
+function stopMoveLeft() {
+  if (moveLeft !== undefined) {
+    clearInterval(moveLeft);
+    moveLeft = undefined;
+  }
+}
+
+function stopMoveRight() {
+  if (moveRight !== undefined) {
+    clearInterval(moveRight);
+    moveRight = undefined;
   }
 }
 
@@ -182,7 +253,7 @@ function resetGame() {
   score = 0;
   scoreDisplay.innerText = `Score: ${score}`;
   lives = 3;
-  livesDisplay.innerText = `Lives: ${lives}`;
+  livesDisplay.innerText = `Lives: ${displayLives()}`;
   gameDisplay.innerHTML = "";
   gameOver();
   loadGame();
@@ -191,8 +262,11 @@ function resetGame() {
 function gameOver() {
   if (lives <= 0) {
     gameDisplay.innerHTML = gameOverScreen;
-    lives = null;
-    livesDisplay.innerText = `Lives: ${lives}`;
+    playButtons.forEach((playButton) => {
+      playButton.style.display = "none";
+    });
+    lives = 0;
+    livesDisplay.innerText = `Lives: ${displayLives()}`;
     ballX = gameDisplayWidth / 2 - 10;
     ballY = gameDisplayHeight - (1 * 55 + 21);
     ballVelocityX = 0;
@@ -203,8 +277,11 @@ function gameOver() {
     moveBallConstant = undefined;
     checkBallConstant = undefined;
     document.removeEventListener("keydown", movePlayer);
+    document.removeEventListener("keyup", stopMovePlayer);
+    stopMoveLeft();
+    stopMoveRight();
   } else {
-    livesDisplay.innerText = `Lives: ${lives}`;
+    livesDisplay.innerText = `Lives: ${displayLives()}`;
     ballX = gameDisplayWidth / 2 - 10;
     ballY = gameDisplayHeight - (1 * 55 + 21);
     ballVelocityX = 0;
@@ -215,8 +292,14 @@ function gameOver() {
     moveBallConstant = undefined;
     checkBallConstant = undefined;
     document.removeEventListener("keydown", movePlayer);
+    document.removeEventListener("keyup", stopMovePlayer);
+    stopMoveLeft();
+    stopMoveRight();
     loadPlayer();
   }
+  playButtons.forEach((playButton) => {
+    playButton.style.display = 'none';
+  });
 }
 
 function checkCollision() {
@@ -226,7 +309,7 @@ function checkCollision() {
   // check for collisions with walls
   // check for collision from top
   if (ballY <= 0) {
-    ballVelocityY = 1;
+    ballVelocityY = 2;
   }
   // check for collision from bottom, if yes then game over
   if (ballY + 21 >= gameDisplayHeight) {
@@ -235,11 +318,11 @@ function checkCollision() {
   }
   // check for collision from left
   if (ballX <= 0) {
-    ballVelocityX = 1;
+    ballVelocityX = 2;
   }
   // check for collision from right
   if (ballX + 21 >= gameDisplayWidth) {
-    ballVelocityX = -1;
+    ballVelocityX = -2;
   }
 
   // check for collision with userblock
@@ -250,13 +333,13 @@ function checkCollision() {
     ballX < userBlockX + 165
   ) {
     if (ballMidX <= userBlockX) {
-      ballVelocityX = -1;
+      ballVelocityX = -2;
     } else if (ballMidX >= userBlockX + 165) {
-      ballVelocityX = 1;
+      ballVelocityX = 2;
     } else if (ballMidY <= userBlockY) {
-      ballVelocityY = -1;
+      ballVelocityY = -2;
     } else if (ballMidY >= userBlockY + 10) {
-      ballVelocityY = 1;
+      ballVelocityY = 2;
     }
   }
   for (let i = blockList.length - 1; i >= 0; i--) {
@@ -287,24 +370,31 @@ function moveBall() {
 
 function startGame() {
   document.addEventListener("keydown", movePlayer);
+  document.addEventListener("keyup", stopMovePlayer);
+  playButtons.forEach((playButton) => {
+    playButton.style.display = "block";
+  });
   if (moveBallConstant === undefined) {
-    moveBallConstant = setInterval(moveBall, 6);
-    ballVelocityY = -1;
+    moveBallConstant = setInterval(moveBall, 9);
+    ballVelocityY = -2;
     randomizer = Math.random();
     if (randomizer < 0.5) {
-      ballVelocityX = 1;
+      ballVelocityX = 2;
     } else {
-      ballVelocityX = -1;
+      ballVelocityX = -2;
     }
   }
   if (checkBallConstant === undefined) {
-    checkBallConstant = setInterval(checkCollision, 2);
+    checkBallConstant = setInterval(checkCollision, 3);
   }
 }
 
 function winGame() {
   gameDisplay.innerHTML = winScreen;
-  livesDisplay.innerText = `Lives: ${lives}`;
+  playButtons.forEach((playButton) => {
+    playButton.style.display = "none";
+  });
+  livesDisplay.innerText = `Lives: ${displayLives()}`;
   ballX = gameDisplayWidth / 2 - 10;
   ballY = gameDisplayHeight - (1 * 55 + 21);
   ballVelocityX = 0;
@@ -315,6 +405,9 @@ function winGame() {
   moveBallConstant = undefined;
   checkBallConstant = undefined;
   document.removeEventListener("keydown", movePlayer);
+  document.removeEventListener("keyup", stopMovePlayer);
+  stopMoveLeft();
+  stopMoveRight();
 }
 
 function loadNextLevel() {
@@ -322,7 +415,7 @@ function loadNextLevel() {
   score = 0;
   scoreDisplay.innerText = `Score: ${score}`;
   lives = 3;
-  livesDisplay.innerText = `Lives: ${lives}`;
+  livesDisplay.innerText = `Lives: ${displayLives()}`;
   gameDisplay.innerHTML = "";
   loadGame();
 }
