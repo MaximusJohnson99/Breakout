@@ -303,7 +303,6 @@ function startGame() {
 }
 
 function winGame() {
-  currentlevel++;
   gameDisplay.innerHTML = winScreen;
   livesDisplay.innerText = `Lives: ${lives}`;
   ballX = gameDisplayWidth / 2 - 10;
@@ -319,6 +318,11 @@ function winGame() {
 }
 
 function loadNextLevel() {
+  currentlevel++;
+  score = 0;
+  scoreDisplay.innerText = `Score: ${score}`;
+  lives = 3;
+  livesDisplay.innerText = `Lives: ${lives}`;
   gameDisplay.innerHTML = "";
   loadGame();
 }
