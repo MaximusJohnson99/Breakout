@@ -262,7 +262,7 @@ button:hover {
 
 @media screen and (max-width: 585px) {
 #game-display {
-  scale: 0.4;
+  scale: 0.35;
 }
 #game-and-controls {
   height: 275px;
