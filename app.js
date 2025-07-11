@@ -1,8 +1,10 @@
 let lives = 3;
 let livesEmoji = "";
 let score = 0;
+let totalBlocks;
+let blocksDisplay = document.getElementById('blocksNum');
 let scoreDisplay = document.getElementById("score");
-let currentlevel = 1;
+let currentlevel = 11;
 let livesDisplay = document.getElementById("lives");
 function displayLives() {
   livesEmoji = "";
@@ -40,6 +42,7 @@ if (randomizer < 0.5) {
   ballVelocityX = -2;
 }
 let ballVelocityY = -2;
+let userVelocity = 15;
 let currentBlock;
 const x = "x";
 const o = "o";
@@ -57,7 +60,7 @@ const colorArray = [
 ];
 let gameMap;
 const blockList = [];
-const gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
+let gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
 const winScreen = `<div class="gameend-screen"><h1>You Win!</h1> <button onclick="loadNextLevel()">Next Level</button></div>`;
 const completeScreen = `<div class="gameend-screen"><h1>Congratulations! You have completed the game!</h1></div>`;
 let playButtons = document.querySelectorAll(".play-buttons");
@@ -73,6 +76,7 @@ playButtonRight.addEventListener("mouseup", stopMoveRight);
 playButtonRight.addEventListener("touchend", stopMoveRight);
 let moveLeft;
 let moveRight;
+let halfPoint;
 
 async function loadLevels() {
   let allLevelsRaw = await fetch("maps.json");
@@ -162,6 +166,9 @@ function loadMap() {
       gameDisplay.append(boxDiv);
     }
   }
+  totalBlocks = blockList.length;
+  halfPoint = Math.floor(blockList.length / 2);
+  blocksDisplay.innerText = `Blocks: ${totalBlocks}/${totalBlocks}`
 }
 
 function loadPlayer() {
@@ -216,8 +223,8 @@ function stopMovePlayer(e) {
 function movePlayerLeft() {
   if (moveLeft === undefined) {
     moveLeft = setInterval(() => {
-      if (userBlockX >= 15) {
-        userBlockX -= 15;
+      if (userBlockX >= userVelocity) {
+        userBlockX -= userVelocity;
         userBlock.style.left = userBlockX + "px";
       }
     }, 35);
@@ -227,8 +234,8 @@ function movePlayerLeft() {
 function movePlayerRight() {
   if (moveRight === undefined) {
     moveRight = setInterval(() => {
-      if (userBlockX <= 12 * 55 - 15) {
-        userBlockX += 15;
+      if (userBlockX <= 12 * 55 - userVelocity) {
+        userBlockX += userVelocity;
         userBlock.style.left = userBlockX + "px";
       }
     }, 35);
@@ -353,9 +360,18 @@ function checkCollision() {
       currentBlock.element.removeAttribute("id");
       currentBlock.element.style.backgroundColor = "white";
       blockList.splice(i, 1);
+      blocksDisplay.innerText = `Blocks: ${blockList.length}/${totalBlocks}`;
+      if (blockList.length <= halfPoint) {
+        clearInterval(moveBallConstant);
+        clearInterval(checkBallConstant);
+        moveBallConstant = setInterval(moveBall, 6);
+        checkBallConstant = setInterval(checkCollision, 2);
+        userVelocity = 25;
+      }
       if (blockList.length === 0) {
         winGame();
       }
+      
     }
   }
   return;
