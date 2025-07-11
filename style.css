@@ -26,10 +26,9 @@ body {
   align-items: center;
   text-shadow: 4px 4px 8px var(--fluorescent-cyan);
   border-bottom: 3px solid var(--verdigris);
-
   > h1 {
     font-family: "Tiny5", sans-serif;
-    font-size: 55px;
+    font-size: min(8vw, 55px);
     letter-spacing: 3px;
     font-weight: 700;
     color: var(--fluorescent-cyan);
@@ -43,7 +42,7 @@ body {
   align-items: center;
   height: min-content;
   background-color: var(--space-cadet);
-  width: 80%;
+  width: 90%;
   border-radius: 50px;
   border: 3px solid var(--verdigris);
   margin-top: 35px;
@@ -89,12 +88,14 @@ body {
 }
 
 button {
-  width: 220px;
-  height: 60px;
-  font-size: 20px;
+  width: min(17vw, 225px);
+  height: fit-content;
+  overflow: hidden;
+  padding: 0px 5px;
+  text-align: center;
   background-color: var(--verdigris);
   font-family: "Tiny5", sans-serif;
-  font-size: 32px;
+  font-size: min(4vw, 32px);
   font-weight: bold;
   border-radius: 20px;
   letter-spacing: 2px;
@@ -112,7 +113,7 @@ button:hover {
 
 #controls {
   display: flex;
-  width: 75%;
+  width: 90%;
   justify-content: space-around;
   margin-bottom: 20px;
   align-items: center;
@@ -124,12 +125,13 @@ button:hover {
   border: 5px solid var(--oxford-blue);
   background-color: var(--verdigris);
   width: 20%;
-  padding: 0 20px;
+  padding: 5px min(3vw ,20px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   justify-content: space-evenly;
-  font-size: 30px;
+  font-size: min(3.25vw, 30px);
   font-weight: bold;
   letter-spacing: 2px;
   height: 100px;
@@ -141,29 +143,32 @@ button:hover {
 
 #how-to {
   background-color: var(--oxford-blue);
-  width: 90%;
+  width: 80%;
   margin-bottom: 25px;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
+  padding: 25px;
+  margin: 0px 25px 25px 25px;
   border-radius: 25px;
   > h1 {
     color: white;
     letter-spacing: 3px;
-    font-size: 35px;
+    font-size: min(5vw, 35px);
     margin-top: 10px;
     margin-bottom: 5px;
   }
   > p {
     margin-top: 5px;
     margin-bottom: 10px;
-    font-size: 25px;
+    font-size: min(3vw, 25px);
     letter-spacing: 2px;
     text-align: center;
     > svg {
-      margin-bottom: -7px;
+      height: min(3vw, 30px);
+      width: min();
+      margin-bottom: max(-0.5vw, -7px);
       margin-right: 2px;
       background-color: var(--fluorescent-cyan);
     }
@@ -221,4 +226,52 @@ button:hover {
     }
   }
   margin-bottom: 10px;
+}
+
+#tab-phone-controls {
+  display: none;
+}
+
+@media screen and (max-width: 860px) {
+  #tab-phone-controls {
+    display: flex;
+  }
+  #game-display {
+    scale: 0.6;
+    margin: 0 10px;
+  }
+  #game-and-controls {
+    height: 350px;
+    > button {
+      width: 0;
+      height: 0;
+      content: none;
+      padding: 0;
+      border: none;
+    }
+  }
+  button {
+    height: 40px;
+    margin: 15px 10px;
+    > svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
+}
+
+@media screen and (max-width: 585px) {
+#game-display {
+  scale: 0.4;
+}
+#game-and-controls {
+  height: 275px;
+}
+button {
+  height: 35px;
+}
+#stats {
+  height: 75px;
+}
+
 }
