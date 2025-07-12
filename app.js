@@ -2,9 +2,10 @@ let lives = 3;
 let livesEmoji = "";
 let score = 0;
 let totalBlocks;
-let blocksDisplay = document.getElementById('blocksNum');
+let blocksDisplay = document.createElement('h2');
+blocksDisplay.setAttribute('id', 'blocksNum');
 let scoreDisplay = document.getElementById("score");
-let currentlevel = 11;
+let currentlevel = 1;
 let livesDisplay = document.getElementById("lives");
 function displayLives() {
   livesEmoji = "";
@@ -59,8 +60,8 @@ const colorArray = [
   "violet",
 ];
 let gameMap;
-const blockList = [];
-let gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
+let blockList = [];
+let gameOverScreen;
 const winScreen = `<div class="gameend-screen"><h1>You Win!</h1> <button onclick="loadNextLevel()">Next Level</button></div>`;
 const completeScreen = `<div class="gameend-screen"><h1>Congratulations! You have completed the game!</h1></div>`;
 let playButtons = document.querySelectorAll(".play-buttons");
@@ -150,6 +151,7 @@ class Block {
 }
 
 function loadMap() {
+  blockList = [];
   for (let i = 0; i < gameMap.length; i++) {
     let row = gameMap[i];
     for (let j = 0; j < row.length; j++) {
@@ -168,7 +170,8 @@ function loadMap() {
   }
   totalBlocks = blockList.length;
   halfPoint = Math.floor(blockList.length / 2);
-  blocksDisplay.innerText = `Blocks: ${totalBlocks}/${totalBlocks}`
+  blocksDisplay.innerText = `Blocks: ${blockList.length}/${totalBlocks}`;
+  gameDisplay.appendChild(blocksDisplay);
 }
 
 function loadPlayer() {
@@ -176,6 +179,7 @@ function loadPlayer() {
   ball.style.top = ballY + "px";
   userBlock.style.left = userBlockX + "px";
   userBlock.style.top = userBlockY + "px";
+  userVelocity = 15;
   gameDisplay.appendChild(ball);
   gameDisplay.appendChild(userBlock);
 }
@@ -268,6 +272,7 @@ function resetGame() {
 
 function gameOver() {
   if (lives <= 0) {
+    gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
     gameDisplay.innerHTML = gameOverScreen;
     playButtons.forEach((playButton) => {
       playButton.style.display = "none";
@@ -305,7 +310,7 @@ function gameOver() {
     loadPlayer();
   }
   playButtons.forEach((playButton) => {
-    playButton.style.display = 'none';
+    playButton.style.display = "none";
   });
 }
 
@@ -371,7 +376,6 @@ function checkCollision() {
       if (blockList.length === 0) {
         winGame();
       }
-      
     }
   }
   return;
@@ -391,7 +395,11 @@ function startGame() {
     playButton.style.display = "block";
   });
   if (moveBallConstant === undefined) {
-    moveBallConstant = setInterval(moveBall, 9);
+    if (blockList.length <= halfPoint) {
+      moveBallConstant = setInterval(moveBall, 6);
+    } else {
+      moveBallConstant = setInterval(moveBall, 9);
+    }
     ballVelocityY = -2;
     randomizer = Math.random();
     if (randomizer < 0.5) {
@@ -401,7 +409,15 @@ function startGame() {
     }
   }
   if (checkBallConstant === undefined) {
+    if (blockList.length <= halfPoint) {
+      checkBallConstant = setInterval(checkCollision, 2);
+    }
     checkBallConstant = setInterval(checkCollision, 3);
+  }
+  if (blockList.length <= halfPoint) {
+    userVelocity = 25;
+  } else {
+    userVelocity = 15;
   }
 }
 
