@@ -106,18 +106,22 @@ button:hover {
   background-color: var(--oxford-blue);
   color: var(--fluorescent-cyan);
   scale: 1.1;
-  transition: ease 200ms;
+  transition: ease-in 200ms;
   text-shadow: 2px 2px 4px var(--verdigris), -2px -2px 4px var(--verdigris);
+  border: 6px solid var(--verdigris)
 }
 
 #controls {
   display: flex;
   width: 75%;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  background-color: var(--oxford-blue);
   margin-bottom: 20px;
+  padding: 25px;
   align-items: center;
   color: var(--oxford-blue);
   font-weight: bold;
+  border-radius: 25px;
 }
 
 #stats {
@@ -229,4 +233,9 @@ button:hover {
   font-size: 30px;
   font-weight: bold;
   letter-spacing: 1px;
+}
+
+hr {
+  height: 125px;
+  margin: 10px;
 }
