@@ -47,22 +47,17 @@ const ball = document.createElement("div");
 ball.setAttribute("id", "ball");
 const userBlock = document.createElement("div");
 userBlock.setAttribute("id", "user-block");
-let ballX = gameDisplayWidth / 2 - 10;
-let ballY = gameDisplayHeight - (1 * 55 + 21);
+let ballX;
+let ballY;
 let ballMidPoint = [];
 let ballMidX;
 let ballMidY;
-let userBlockX = 6 * 55;
+let userBlockX;
 const userBlockY = 9 * 55;
-let randomizer = Math.random();
+let randomizer;
 let ballVelocityX;
-if (randomizer < 0.5) {
-  ballVelocityX = 2;
-} else {
-  ballVelocityX = -2;
-}
-let ballVelocityY = -2;
-let userVelocity = 15;
+let ballVelocityY;
+let userVelocity;
 let currentBlock;
 const x = "x";
 const o = "o";
@@ -202,11 +197,21 @@ function loadMap() {
 }
 
 function loadPlayer() {
+  ballX = gameDisplayWidth / 2 - 10;
+  ballY = gameDisplayHeight - (1 * 55 + 21);
+  userBlockX = 6 * 55;
+  randomizer = Math.random();
+  if (randomizer < 0.5) {
+    ballVelocityX = 2;
+  } else {
+    ballVelocityX = -2;
+  }
+  ballVelocityY = -2;
+  userVelocity = 15;
   ball.style.left = ballX + "px";
   ball.style.top = ballY + "px";
   userBlock.style.left = userBlockX + "px";
   userBlock.style.top = userBlockY + "px";
-  userVelocity = 15;
   gameDisplay.appendChild(ball);
   gameDisplay.appendChild(userBlock);
 }
@@ -465,11 +470,6 @@ function winGame() {
     playButton.style.display = "none";
   });
   livesDisplay.innerText = `Lives: ${displayLives()}`;
-  ballX = gameDisplayWidth / 2 - 10;
-  ballY = gameDisplayHeight - (1 * 55 + 21);
-  ballVelocityX = 0;
-  ballVelocityY = 0;
-  userBlockX = 6 * 55;
   clearInterval(moveBallConstant);
   clearInterval(checkBallConstant);
   moveBallConstant = undefined;
@@ -482,7 +482,7 @@ function winGame() {
 
 function loadNextLevel() {
   playSound(buttonClickSound);
-  // currentlevel++;
+  currentlevel++;
   score = 0;
   scoreDisplay.innerText = `Score: ${score}`;
   lives = 3;
