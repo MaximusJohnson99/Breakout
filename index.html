@@ -14,7 +14,7 @@
   </head>
   <body>
     <div id="header">
-      <h1>Breakout Blast! </h1>
+      <h1>Breakout Blast!</h1>
     </div>
     <div id="game">
       <div id="game-and-controls">
@@ -58,10 +58,12 @@
           <p id="lives">Lives: 0</p>
           <p id="score">Score: 0</p>
         </div>
-        <hr>
-        <button onclick="startGame()" class="button">Start Game</button>
-        <hr>
-        <button onclick="resetGame()" class="button">Reset Game</button>
+        <hr />
+        <button onclick="startGame()">Start</button>
+        <hr />
+        <button onclick="resetGame()">Reset</button>
+        <hr />
+        <button onclick="pauseGame()">Pause</button>
       </div>
       <div id="how-to">
         <h1>How To Play:</h1>
@@ -101,8 +103,8 @@
           paddle, and the bricks. Hit the ball against the bricks to destroy
           them; once a block reaches 0, it is destroyed. If the ball falls below
           the paddle, you lose a life. Destroy all the bricks to advance to the
-          next level. Hitting a block gains 1 point, while
-          destroying a block adds 10 points.
+          next level. Hitting a block gains 1 point, while destroying a block
+          adds 10 points.
         </p>
       </div>
     </div>

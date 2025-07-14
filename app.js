@@ -1,11 +1,30 @@
+const wallBounceSound = new Audio("./Sounds/mixkit-game-ball-tap-2073.wav");
+const userBlockBounceSound = new Audio(
+  "./Sounds/mixkit-game-ball-tap-2073.wav"
+);
+const hitSound = new Audio(
+  "./Sounds/mixkit-player-jumping-in-a-video-game-2043.wav"
+);
+const gameOverSound = new Audio(
+  "./Sounds/mixkit-sci-fi-positive-notification-266.wav"
+);
+const buttonClickSound = new Audio(
+  "./Sounds/mixkit-video-game-retro-click-237.wav"
+);
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
 let lives = 3;
 let livesEmoji = "";
 let score = 0;
 let totalBlocks;
-let blocksDisplay = document.createElement('h2');
-blocksDisplay.setAttribute('id', 'blocksNum');
+let blocksDisplay = document.createElement("h2");
+blocksDisplay.setAttribute("id", "blocksNum");
 let scoreDisplay = document.getElementById("score");
-let currentlevel = 1;
+let currentlevel = 0;
 let livesDisplay = document.getElementById("lives");
 function displayLives() {
   livesEmoji = "";
@@ -62,8 +81,10 @@ const colorArray = [
 let gameMap;
 let blockList = [];
 let gameOverScreen;
-const winScreen = `<div class="gameend-screen"><h1>You Win!</h1> <button onclick="loadNextLevel()">Next Level</button></div>`;
-const completeScreen = `<div class="gameend-screen"><h1>Congratulations! You have completed the game!</h1></div>`;
+const winScreen = `<div class="game-screen"><h1>YOU WIN!</h1><button onclick="loadNextLevel()">Next Level</button></div>`;
+const completeScreen = `<div class="game-screen"><h1>Congratulations! You have completed the game!</h1></div>`;
+const homeScreen = `<div class="game-screen"><h1>Breakout Blast!</h1><h2>By MaximusJohnson99</h2><button onclick="loadNextLevel()">Play</button></div>`;
+gameDisplay.innerHTML = homeScreen;
 let playButtons = document.querySelectorAll(".play-buttons");
 let playButtonLeft = playButtons[0];
 let playButtonRight = playButtons[1];
@@ -78,6 +99,7 @@ playButtonRight.addEventListener("touchend", stopMoveRight);
 let moveLeft;
 let moveRight;
 let halfPoint;
+let controls = document.getElementById("controls");
 
 async function loadLevels() {
   let allLevelsRaw = await fetch("maps.json");
@@ -109,8 +131,12 @@ class Block {
     this.lastHitTime = 0;
     this.coolDownDuration = 900;
     this.currentTime;
+    this.sound = new Audio(
+      "./Sounds/mixkit-player-jumping-in-a-video-game-2043.wav"
+    );
   }
   hitBlock() {
+    playSound(this.sound);
     this.currentTime = Date.now();
     if (this.currentTime - this.lastHitTime >= this.coolDownDuration) {
       score++;
@@ -142,6 +168,7 @@ class Block {
       ballY <= this.bottomRight[1]
     ) {
       this.hitBlock();
+
       return;
     } else {
       this.lastHitTime = 0;
@@ -187,8 +214,10 @@ function loadPlayer() {
 async function loadGame() {
   await loadLevels();
   if (gameMap !== undefined) {
+    gameDisplay.innerHTML = "";
     loadPlayer();
     loadMap();
+    controls.style.display = "flex";
   } else {
     gameDisplay.innerHTML = completeScreen;
     playButtons.forEach((playButton) => {
@@ -196,7 +225,6 @@ async function loadGame() {
     });
   }
 }
-loadGame();
 
 function movePlayer(e) {
   switch (e.key) {
@@ -261,6 +289,7 @@ function stopMoveRight() {
 }
 
 function resetGame() {
+  playSound(buttonClickSound);
   score = 0;
   scoreDisplay.innerText = `Score: ${score}`;
   lives = 3;
@@ -272,7 +301,7 @@ function resetGame() {
 
 function gameOver() {
   if (lives <= 0) {
-    gameOverScreen = `<div class="gameend-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
+    gameOverScreen = `<div class="game-screen"><h1>Game Over!</h1><h2>Score: ${score}</h2><button onclick='resetGame()'>Retry</button></div>`;
     gameDisplay.innerHTML = gameOverScreen;
     playButtons.forEach((playButton) => {
       playButton.style.display = "none";
@@ -321,19 +350,23 @@ function checkCollision() {
   // check for collisions with walls
   // check for collision from top
   if (ballY <= 0) {
+    playSound(wallBounceSound);
     ballVelocityY = 2;
   }
   // check for collision from bottom, if yes then game over
   if (ballY + 21 >= gameDisplayHeight) {
+    playSound(gameOverSound);
     lives--;
     gameOver();
   }
   // check for collision from left
   if (ballX <= 0) {
+    playSound(wallBounceSound);
     ballVelocityX = 2;
   }
   // check for collision from right
   if (ballX + 21 >= gameDisplayWidth) {
+    playSound(wallBounceSound);
     ballVelocityX = -2;
   }
 
@@ -345,12 +378,16 @@ function checkCollision() {
     ballX < userBlockX + 165
   ) {
     if (ballMidX <= userBlockX) {
+      playSound(userBlockBounceSound);
       ballVelocityX = -2;
     } else if (ballMidX >= userBlockX + 165) {
+      playSound(userBlockBounceSound);
       ballVelocityX = 2;
     } else if (ballMidY <= userBlockY) {
+      playSound(userBlockBounceSound);
       ballVelocityY = -2;
     } else if (ballMidY >= userBlockY + 10) {
+      playSound(userBlockBounceSound);
       ballVelocityY = 2;
     }
   }
@@ -389,6 +426,7 @@ function moveBall() {
 }
 
 function startGame() {
+  playSound(buttonClickSound);
   document.addEventListener("keydown", movePlayer);
   document.addEventListener("keyup", stopMovePlayer);
   playButtons.forEach((playButton) => {
@@ -443,7 +481,8 @@ function winGame() {
 }
 
 function loadNextLevel() {
-  currentlevel++;
+  playSound(buttonClickSound);
+  // currentlevel++;
   score = 0;
   scoreDisplay.innerText = `Score: ${score}`;
   lives = 3;

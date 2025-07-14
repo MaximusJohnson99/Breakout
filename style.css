@@ -2,7 +2,9 @@
   --oxford-blue: hsla(225, 58%, 11%, 1);
   --oxford-blue: #0c142c;
   --space-cadet: hsla(225, 40%, 18%, 1);
-  --yinmn-blue: hsla(213, 30%, 32%, 1);
+  --space-cadet: #1c2540;
+  --yinmn-blue: hsl(213, 30%, 32%);
+  --yinmn-blue: #394f6a;
   --verdigris: hsla(179, 44%, 55%, 1);
   --fluorescent-cyan: hsla(171, 100%, 72%, 1);
 }
@@ -89,17 +91,19 @@ body {
 }
 
 button {
-  width: 220px;
+  width: fit-content;
   height: 60px;
   font-size: 20px;
   background-color: var(--verdigris);
   font-family: "Tiny5", sans-serif;
-  font-size: 32px;
+  font-size: 35px;
   font-weight: bold;
+  padding: 0px 25px;
+  margin: 0px 10px;
   border-radius: 20px;
   letter-spacing: 2px;
   color: var(--oxford-blue);
-  border: 5px solid var(--oxford-blue);
+  border: 5px solid var(--space-cadet);
 }
 
 button:hover {
@@ -108,11 +112,12 @@ button:hover {
   scale: 1.1;
   transition: ease-in 200ms;
   text-shadow: 2px 2px 4px var(--verdigris), -2px -2px 4px var(--verdigris);
-  border: 6px solid var(--verdigris)
+  border: 6px solid var(--verdigris);
+  margin: 0 10px;
 }
 
 #controls {
-  display: flex;
+  display: none;
   width: 75%;
   justify-content: space-evenly;
   background-color: var(--oxford-blue);
@@ -125,7 +130,7 @@ button:hover {
 }
 
 #stats {
-  border: 5px solid var(--oxford-blue);
+  border: 5px solid var(--space-cadet);
   background-color: var(--verdigris);
   width: 20%;
   padding: 0 20px;
@@ -136,7 +141,7 @@ button:hover {
   font-size: 30px;
   font-weight: bold;
   letter-spacing: 2px;
-  height: 100px;
+  height: 90px;
   border-radius: 15px;
   > p {
     margin: 0;
@@ -175,13 +180,15 @@ button:hover {
   color: var(--fluorescent-cyan);
 }
 
-.gameend-screen {
+.game-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   background-color: var(--oxford-blue);
+  background-image: url("./wall-svgrepo-com(3).png");
+  background-size: 49%;
   grid-area: span 10 / span 15;
   > h1 {
     font-size: 100px;
@@ -191,6 +198,7 @@ button:hover {
     font-weight: bold;
     letter-spacing: 3px;
     margin-bottom: 10px;
+    margin-top: 10px;
   }
   > h2 {
     margin-top: 0;
