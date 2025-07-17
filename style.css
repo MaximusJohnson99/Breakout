@@ -3,7 +3,7 @@
   --oxford-blue: #0c142c;
   --space-cadet: hsla(225, 40%, 18%, 1);
   --space-cadet: #1c2540;
-  --yinmn-blue: hsl(213, 30%, 32%);
+  --yinmn-blue: hsla(213, 30%, 32%, 1);
   --yinmn-blue: #394f6a;
   --verdigris: hsla(179, 44%, 55%, 1);
   --fluorescent-cyan: hsla(171, 100%, 72%, 1);
@@ -45,10 +45,11 @@ body {
   align-items: center;
   height: min-content;
   background-color: var(--space-cadet);
-  width: 80%;
+  width: 90%;
   border-radius: 50px;
   border: 3px solid var(--verdigris);
   margin-top: 35px;
+  padding-top: 20px;
 }
 
 #game-display {
@@ -59,6 +60,7 @@ body {
   border: 6px solid var(--verdigris);
   scale: 0.9;
   margin: 5px;
+  margin-bottom: 0px;
 }
 
 .empty {
@@ -91,15 +93,15 @@ body {
 }
 
 button {
-  width: fit-content;
+  width: min-content;
   height: 60px;
   font-size: 20px;
   background-color: var(--verdigris);
   font-family: "Tiny5", sans-serif;
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
-  padding: 0px 25px;
-  margin: 0px 10px;
+  padding: 0px 12px;
+  margin: 0px 0px;
   border-radius: 20px;
   letter-spacing: 2px;
   color: var(--oxford-blue);
@@ -109,8 +111,8 @@ button {
 button:hover {
   background-color: var(--oxford-blue);
   color: var(--fluorescent-cyan);
-  scale: 1.1;
-  transition: ease-in 200ms;
+  scale: 1.05;
+  transition: ease-in 150ms;
   text-shadow: 2px 2px 4px var(--verdigris), -2px -2px 4px var(--verdigris);
   border: 6px solid var(--verdigris);
   margin: 0 10px;
@@ -118,27 +120,31 @@ button:hover {
 
 #controls {
   display: none;
-  width: 75%;
+  width: calc(837px * 0.85);
   justify-content: space-evenly;
   background-color: var(--oxford-blue);
   margin-bottom: 20px;
+  margin-top: 0;
   padding: 25px;
   align-items: center;
   color: var(--oxford-blue);
   font-weight: bold;
-  border-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  height: 100px;
 }
 
 #stats {
   border: 5px solid var(--space-cadet);
   background-color: var(--verdigris);
-  width: 20%;
+  width: 26%;
+  margin-right: 0px;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bold;
   letter-spacing: 2px;
   height: 90px;
@@ -187,7 +193,7 @@ button:hover {
   justify-content: center;
   text-align: center;
   background-color: var(--oxford-blue);
-  background-image: url("./wall-svgrepo-com(3).png");
+  background-image: url("./wall-svgrepo-com.png");
   background-size: 49%;
   grid-area: span 10 / span 15;
   > h1 {
@@ -201,7 +207,7 @@ button:hover {
     margin-top: 10px;
   }
   > h2 {
-    margin-top: 0;
+    margin-top: 10px;
     font-size: 50px;
     color: var(--fluorescent-cyan);
     text-shadow: 4px 4px 8px var(--verdigris), -4px -4px 8px var(--verdigris);
@@ -213,6 +219,8 @@ button:hover {
 
 #game-and-controls {
   margin-top: 20px;
+  margin-bottom: 0;
+  height: 500px;
   display: flex;
   align-items: center;
   width: 90%;
@@ -247,3 +255,51 @@ hr {
   height: 125px;
   margin: 10px;
 }
+
+#pause-screen {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  background-color: hsla(213, 30%, 32%, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > svg {
+    fill: var(--fluorescent-cyan);
+    width: 300px;
+    height: 300px;
+    filter: drop-shadow(-8px -8px 8px var(--verdigris)) drop-shadow(8px 8px 8px var(--verdigris)) drop-shadow(8px -8px 8px var(--verdigris)) drop-shadow(-8px 8px 8px var(--verdigris));
+  }
+}
+
+#music-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  > svg {
+    position: absolute;
+  }
+}
+
+#sound-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  position: relative;
+  > svg {
+    position: absolute;
+  }
+}
+#sound-button:hover, #music-button:hover {
+  > #sound-svg, #music-svg {
+    > path, g {
+      fill: var(--fluorescent-cyan);
+    }
+  }
+}
+
